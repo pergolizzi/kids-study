@@ -3611,19 +3611,25 @@ function genMathQuestions(type) {
 
   // 每次生成新题目时递增计数，确保下次生成不同的题目
   state.mathDoneCount = (state.mathDoneCount || 0) + 1;
+
+  // 用 seed 生成伪随机序列，保证每次点击生成不同的题
   const seed = state.mathDoneCount;
 
-  for (let i = 0; i < 10; i++) {
+  let idx = 0; // 实际显示的题目序号
+  let attempt = 0;
+  while (idx < 10 && attempt < 100) {
+    attempt++;
     let q, a;
-    // 使用 seed + i 作为种子来影响随机数
-    const r1 = mulberry32(seed * 100 + i * 7 + 1);
-    const r2 = mulberry32(seed * 100 + i * 7 + 2);
-    const r3 = mulberry32(seed * 100 + i * 7 + 3);
+
+    // 基于 seed 和 attempt 的确定性随机数
+    const s1 = seededRandom(seed * 1000 + attempt * 3 + 1);
+    const s2 = seededRandom(seed * 1000 + attempt * 3 + 2);
+    const s3 = seededRandom(seed * 1000 + attempt * 3 + 3);
 
     if (type === 'normal') {
-      const a1 = Math.floor(r1 * 20) + 1;
-      const a2 = Math.floor(r2 * 20) + 1;
-      const op = r3 > 0.5 ? '+' : '-';
+      const a1 = Math.floor(s1 * 20) + 1;
+      const a2 = Math.floor(s2 * 20) + 1;
+      const op = s3 > 0.5 ? '+' : '-';
       if (op === '+') {
         a = a1 + a2;
         if (a > 20) { continue; }
@@ -3634,10 +3640,9 @@ function genMathQuestions(type) {
         q = `${big} - ${small} =`;
       }
     } else if (type === 'maketen') {
-      // 凑十法: a + b = 10 或 10 - a = b
-      const a1 = Math.floor(r1 * 9) + 1;
+      const a1 = Math.floor(s1 * 9) + 1;
       const a2 = 10 - a1;
-      if (r2 > 0.5) {
+      if (s2 > 0.5) {
         q = `凑十法：${a1} + (?) = 10`;
         a = a2;
       } else {
@@ -3645,30 +3650,26 @@ function genMathQuestions(type) {
         a = a2;
       }
     } else if (type === 'poshift') {
-      // 破十法: 12 - 5 = (10 - 5) + 2 = 7
-      const big = Math.floor(r1 * 9) + 11;
-      const small = Math.floor(r2 * (big - 10)) + 1;
+      const big = Math.floor(s1 * 9) + 11;
+      const small = Math.floor(s2 * (big - 10)) + 1;
       a = big - small;
       q = `破十法：${big} - ${small} =`;
     }
     currentMathQuestions.push({ q, a });
     grid.innerHTML += `
-      <div class="math-item" data-idx="${i}">
+      <div class="math-item" data-idx="${idx}">
         <div class="math-question">${q}</div>
-        <input type="number" class="math-input" data-idx="${i}" placeholder="?" oninput="onMathInput(${i})">
+        <input type="number" class="math-input" data-idx="${idx}" placeholder="?" oninput="onMathInput(${idx})">
       </div>
     `;
+    idx++;
   }
 }
 
-// 伪随机数生成器 (mulberry32)，用于生成可重复的"随机"序列
-function mulberry32(a) {
-  return function() {
-    a |= 0; a = a + 0x6D2B79F5 | 0;
-    var t = Math.imul(a ^ a >>> 15, 1 | a);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
+// 简单的确定性伪随机数生成器（基于正弦函数）
+function seededRandom(seed) {
+  const x = Math.sin(seed * 9301 + 49297) * 49297;
+  return x - Math.floor(x);
 }
 
 function onMathInput(idx) {
