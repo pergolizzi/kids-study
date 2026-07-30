@@ -1635,7 +1635,7 @@ body {
   </div>
   <div class="nav-divider"></div>
   <div class="nav-item" data-page="pet">
-    <div class="nav-icon">🐶</div>
+    <div class="nav-icon">🐰</div>
     <div class="nav-label">宠物</div>
   </div>
   <div class="nav-item" data-page="shop">
@@ -1905,14 +1905,14 @@ body {
   <!-- ===== 宠物 ===== -->
   <div class="page" id="page-pet">
     <div class="page-header">
-      <div class="page-title">🐶 我的宠物</div>
+      <div class="page-title">🐰 我的兔兔</div>
       <div class="page-subtitle" id="petStatus"></div>
     </div>
 
     <div class="pet-container">
       <div class="pet-scene">
-        <div class="pet-speech" id="petSpeech">主人好呀~</div>
-        <div class="pet-dog" id="petDog">🐶</div>
+        <div class="pet-speech" id="petSpeech">主人好呀~🐰</div>
+        <div class="pet-dog" id="petRabbit">🐰</div>
         <div class="pet-ground"></div>
       </div>
 
@@ -1938,7 +1938,7 @@ body {
     <div class="card">
       <div class="card-title">
         <div class="card-title-icon" style="background:var(--green-light);">🎒</div>
-        我的食物库存
+        兔兔的用品库存
       </div>
       <div id="inventory" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:10px;"></div>
     </div>
@@ -1961,8 +1961,8 @@ body {
 
     <div class="card">
       <div class="card-title">
-        <div class="card-title-icon" style="background:var(--orange);">🦴</div>
-        狗粮 & 零食
+        <div class="card-title-icon" style="background:var(--orange);">🥕</div>
+        兔子用品商店
       </div>
       <div class="shop-grid" id="shopGrid"></div>
     </div>
@@ -1974,11 +1974,12 @@ body {
       </div>
       <div style="font-size:13px; line-height:2; color:var(--text-light);">
         🎯 每完成任意一项打卡可获得 <b>1 积分</b><br>
-        🦴 普通狗粮 <b>2积分</b> — 恢复20饱腹值<br>
-        🥩 高端营养狗粮 <b>4积分</b> — 恢复40饱腹值+10开心值<br>
-        🦷 狗狗磨牙棒 <b>1积分</b> — 恢复10开心值<br>
-        🍗 狗狗鸡鸭肉干 <b>3积分</b> — 恢复25饱腹值+15开心值<br>
-        ⚠️ 不每天打卡收获积分喂食，狗狗会被饿死哦！
+        🥕 胡萝卜 <b>2积分</b> — 恢复20饱腹值+5开心值<br>
+        🥬 大白菜 <b>2积分</b> — 恢复20饱腹值<br>
+        🌿 鲜草 <b>3积分</b> — 恢复25饱腹值+10开心值<br>
+        🛁 洗浴服务 <b>3积分</b> — 恢复20开心值<br>
+        🧹 清理兔笼 <b>4积分</b> — 恢复10饱腹值+25开心值<br>
+        ⚠️ 不每天打卡收获积分照顾兔兔，小兔子会不开心哦！
       </div>
     </div>
   </div>
@@ -2649,10 +2650,11 @@ const EXERCISES = [
 
 // 商店商品
 const SHOP_ITEMS = [
-  { id: "food_basic", name: "普通狗粮", icon: "🦴", price: 2, hp: 20, happy: 0 },
-  { id: "food_premium", name: "高端营养狗粮", icon: "🥩", price: 4, hp: 40, happy: 10 },
-  { id: "chew_toy", name: "狗狗磨牙棒", icon: "🦷", price: 1, hp: 0, happy: 10 },
-  { id: "jerky", name: "狗狗鸡鸭肉干", icon: "🍗", price: 3, hp: 25, happy: 15 },
+  { id: "carrot", name: "胡萝卜", icon: "🥕", price: 2, hp: 20, happy: 5 },
+  { id: "cabbage", name: "大白菜", icon: "🥬", price: 2, hp: 20, happy: 0 },
+  { id: "grass", name: "鲜草", icon: "🌿", price: 3, hp: 25, happy: 10 },
+  { id: "bath", name: "洗浴服务", icon: "🛁", price: 3, hp: 0, happy: 20 },
+  { id: "clean_cage", name: "清理兔笼", icon: "🧹", price: 4, hp: 10, happy: 25 },
 ];
 
 // 默认任务
@@ -2682,6 +2684,11 @@ let state = {
   deleteMode: false,
   currentLogicIdx: 0,
   currentMusicIdx: 0,
+  // 无限刷题：记录本轮已做过的题索引，确保不重复
+  logicDoneSet: [],
+  musicDoneSet: [],
+  mathDoneCount: 0,
+  pinyinDoneSet: [],
 };
 
 const COLOR_MAP = {
@@ -2776,7 +2783,7 @@ function feedPet(itemId) {
   state.pet.hp = Math.min(100, state.pet.hp + item.hp);
   state.pet.happy = Math.min(100, state.pet.happy + item.happy);
 
-  showToast(`${item.name} 喂食成功！🐶`, 'success');
+  showToast(`${item.name} 喂食成功！🐰`, 'success');
   renderPet();
   renderInventory();
   saveState();
@@ -2881,7 +2888,7 @@ function renderProgress() {
 }
 
 function renderPet() {
-  const dog = document.getElementById('petDog');
+  const rabbit = document.getElementById('petRabbit');
   const speech = document.getElementById('petSpeech');
 
   document.getElementById('petHp').textContent = Math.round(state.pet.hp);
@@ -2892,21 +2899,21 @@ function renderPet() {
   document.getElementById('coinBar').style.width = Math.min(100, state.pet.coins * 2) + '%';
   document.getElementById('shopCoins').textContent = state.pet.coins;
 
-  dog.className = 'pet-dog';
+  rabbit.className = 'pet-dog';
   if (state.pet.hp < 30) {
-    dog.classList.add('hungry');
-    speech.textContent = '好饿啊...快喂我！😭';
-    document.getElementById('petStatus').textContent = '⚠️ 狗狗快饿坏了！';
+    rabbit.classList.add('hungry');
+    speech.textContent = '好饿啊...快给我胡萝卜！😭';
+    document.getElementById('petStatus').textContent = '⚠️ 兔兔快饿坏了！';
   } else if (state.pet.hp < 60) {
     speech.textContent = '肚子有点饿了呢...🥺';
-    document.getElementById('petStatus').textContent = '狗狗需要喂食';
+    document.getElementById('petStatus').textContent = '兔兔需要喂食';
   } else if (state.pet.happy > 70) {
-    dog.classList.add('happy');
-    speech.textContent = '好开心呀~主人最棒了！🥰';
-    document.getElementById('petStatus').textContent = '狗狗很健康 ❤️';
+    rabbit.classList.add('happy');
+    speech.textContent = '蹦蹦跳跳真开心~主人最棒了！🥰';
+    document.getElementById('petStatus').textContent = '兔兔很开心 🐰';
   } else {
-    speech.textContent = '主人好呀~陪我玩吧！🐶';
-    document.getElementById('petStatus').textContent = '狗狗状态良好';
+    speech.textContent = '主人好呀~陪我玩吧！🐰';
+    document.getElementById('petStatus').textContent = '兔兔状态良好';
   }
 
   // 打卡记录
@@ -3001,17 +3008,38 @@ function renderHanzi() {
   const area = document.getElementById('hanziQuizArea');
   const scoreEl = document.getElementById('hanziScore');
 
-  // 每日选15个汉字
-  const startIdx = getDailyIndex(HANZI.length - 15);
-  const todayHanzi = [];
-  for (let i = 0; i < 15; i++) {
-    todayHanzi.push(HANZI[(startIdx + i) % HANZI.length]);
+  // 使用 pinyinDoneSet 追踪已选汉字，确保不重复
+  if (!state.pinyinDoneSet) state.pinyinDoneSet = [];
+  if (state.pinyinDoneSet.length >= HANZI.length) {
+    state.pinyinDoneSet = [];
   }
 
-  // 构建15道题：每题显示拼音，从4个汉字选项中选
-  hanziQuizState = { currentIdx: 0, total: 15, questions: [], correct: 0, wrong: 0, answered: 0, quizDone: false };
+  // 从 HANZI 中随机选 15 个不重复的汉字
+  const todayHanzi = [];
+  const available = HANZI.map((h, i) => ({ ...h, origIdx: i })).filter(h => !state.pinyinDoneSet.includes(h.origIdx));
+  
+  // 如果可用汉字不足15个，重置并全部可用
+  const pool = available.length >= 15 ? available : HANZI.map((h, i) => ({ ...h, origIdx: i }));
+  
+  // 随机选 15 个
+  const selected = [];
+  const poolCopy = [...pool];
+  while (selected.length < 15 && poolCopy.length > 0) {
+    const ri = Math.floor(Math.random() * poolCopy.length);
+    selected.push(poolCopy.splice(ri, 1)[0]);
+  }
 
-  todayHanzi.forEach((h, idx) => {
+  // 标记已选
+  selected.forEach(h => {
+    if (!state.pinyinDoneSet.includes(h.origIdx)) {
+      state.pinyinDoneSet.push(h.origIdx);
+    }
+  });
+
+  // 构建15道题：每题显示拼音，从4个汉字选项中选
+  hanziQuizState = { currentIdx: 0, total: selected.length, questions: [], correct: 0, wrong: 0, answered: 0, quizDone: false };
+
+  selected.forEach((h) => {
     // 生成干扰项（从全部汉字中随机选3个不同字）
     const distractors = [h.char];
     let attempts = 0;
@@ -3331,15 +3359,24 @@ function genMathQuestions(type) {
   const grid = document.getElementById('mathGrid');
   grid.innerHTML = '';
 
+  // 每次生成新题目时递增计数，确保下次生成不同的题目
+  state.mathDoneCount = (state.mathDoneCount || 0) + 1;
+  const seed = state.mathDoneCount;
+
   for (let i = 0; i < 10; i++) {
     let q, a;
+    // 使用 seed + i 作为种子来影响随机数
+    const r1 = mulberry32(seed * 100 + i * 7 + 1);
+    const r2 = mulberry32(seed * 100 + i * 7 + 2);
+    const r3 = mulberry32(seed * 100 + i * 7 + 3);
+
     if (type === 'normal') {
-      const a1 = Math.floor(Math.random() * 20) + 1;
-      const a2 = Math.floor(Math.random() * 20) + 1;
-      const op = Math.random() > 0.5 ? '+' : '-';
+      const a1 = Math.floor(r1 * 20) + 1;
+      const a2 = Math.floor(r2 * 20) + 1;
+      const op = r3 > 0.5 ? '+' : '-';
       if (op === '+') {
         a = a1 + a2;
-        if (a > 20) { i--; continue; }
+        if (a > 20) { continue; }
         q = `${a1} + ${a2} =`;
       } else {
         const big = Math.max(a1, a2), small = Math.min(a1, a2);
@@ -3348,9 +3385,9 @@ function genMathQuestions(type) {
       }
     } else if (type === 'maketen') {
       // 凑十法: a + b = 10 或 10 - a = b
-      const a1 = Math.floor(Math.random() * 9) + 1;
+      const a1 = Math.floor(r1 * 9) + 1;
       const a2 = 10 - a1;
-      if (Math.random() > 0.5) {
+      if (r2 > 0.5) {
         q = `凑十法：${a1} + (?) = 10`;
         a = a2;
       } else {
@@ -3359,8 +3396,8 @@ function genMathQuestions(type) {
       }
     } else if (type === 'poshift') {
       // 破十法: 12 - 5 = (10 - 5) + 2 = 7
-      const big = Math.floor(Math.random() * 9) + 11;
-      const small = Math.floor(Math.random() * (big - 10)) + 1;
+      const big = Math.floor(r1 * 9) + 11;
+      const small = Math.floor(r2 * (big - 10)) + 1;
       a = big - small;
       q = `破十法：${big} - ${small} =`;
     }
@@ -3372,6 +3409,16 @@ function genMathQuestions(type) {
       </div>
     `;
   }
+}
+
+// 伪随机数生成器 (mulberry32)，用于生成可重复的"随机"序列
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
 }
 
 function onMathInput(idx) {
@@ -3440,9 +3487,28 @@ function removeWrong(idx) {
   saveState();
 }
 
-// 思维题
+// 思维题 - 无限刷题，不重复
 function renderLogic() {
-  const idx = getDailyIndex(LOGIC_QUESTIONS.length, 3);
+  state.logicDoneSet = [];
+  showNextLogic();
+}
+
+function getNextLogicIdx() {
+  // 如果所有题都做过了，重置
+  if (state.logicDoneSet.length >= LOGIC_QUESTIONS.length) {
+    state.logicDoneSet = [];
+  }
+  // 随机选一道没做过的题
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * LOGIC_QUESTIONS.length);
+  } while (state.logicDoneSet.includes(idx));
+  state.logicDoneSet.push(idx);
+  return idx;
+}
+
+function showNextLogic() {
+  const idx = getNextLogicIdx();
   state.currentLogicIdx = idx;
   const q = LOGIC_QUESTIONS[idx];
   document.getElementById('logicQuestion').innerHTML = `
@@ -3477,15 +3543,7 @@ function showLogicAnswer() {
 }
 
 function nextLogic() {
-  state.currentLogicIdx = (state.currentLogicIdx + 1) % LOGIC_QUESTIONS.length;
-  const q = LOGIC_QUESTIONS[state.currentLogicIdx];
-  document.getElementById('logicQuestion').innerHTML = `
-    <div class="logic-question">${q.q}</div>
-    <div class="music-options">
-      ${q.options.map((opt, i) => `<div class="music-option" onclick="checkLogicAnswer(this,${i},${q.answer})">${opt}</div>`).join('')}
-    </div>
-    <div id="logicAnswer" style="margin-top:8px; font-size:13px; color:var(--green); display:none;"></div>
-  `;
+  showNextLogic();
 }
 
 // ===== 课外拓展阅读 =====
@@ -3649,7 +3707,26 @@ function speakScience() {
 
 // 乐理
 function renderMusic() {
-  const idx = getDailyIndex(MUSIC_QUESTIONS.length, 4);
+  state.musicDoneSet = [];
+  showNextMusic();
+  const tipIdx = getDailyIndex(MUSIC_TIPS.length, 5);
+  document.getElementById('musicTip').textContent = MUSIC_TIPS[tipIdx];
+}
+
+function getNextMusicIdx() {
+  if (state.musicDoneSet.length >= MUSIC_QUESTIONS.length) {
+    state.musicDoneSet = [];
+  }
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * MUSIC_QUESTIONS.length);
+  } while (state.musicDoneSet.includes(idx));
+  state.musicDoneSet.push(idx);
+  return idx;
+}
+
+function showNextMusic() {
+  const idx = getNextMusicIdx();
   state.currentMusicIdx = idx;
   const q = MUSIC_QUESTIONS[idx];
   const spokenText = q.spoken || q.q;
@@ -3664,8 +3741,6 @@ function renderMusic() {
       ${q.options.map((opt, i) => `<div class="music-option" onclick="checkMusicAnswer(this,${i},${q.answer})">${opt}</div>`).join('')}
     </div>
   `;
-  const tipIdx = getDailyIndex(MUSIC_TIPS.length, 5);
-  document.getElementById('musicTip').textContent = MUSIC_TIPS[tipIdx];
 }
 
 let musicSpeechActive = false;
@@ -3730,20 +3805,7 @@ function nextMusic() {
     speechSynthesis.cancel();
     musicSpeechActive = false;
   }
-  state.currentMusicIdx = (state.currentMusicIdx + 1) % MUSIC_QUESTIONS.length;
-  const q = MUSIC_QUESTIONS[state.currentMusicIdx];
-  const spokenText = q.spoken || q.q;
-  document.getElementById('musicQuiz').innerHTML = `
-    <div class="music-question">
-      ${q.q}
-      <button class="music-speak-btn" onclick="speakMusicQuestion('${spokenText.replace(/'/g, "\\'")}', ${state.currentMusicIdx})" title="语音报题">
-        🔊
-      </button>
-    </div>
-    <div class="music-options">
-      ${q.options.map((opt, i) => `<div class="music-option" onclick="checkMusicAnswer(this,${i},${q.answer})">${opt}</div>`).join('')}
-    </div>
-  `;
+  showNextMusic();
 }
 
 // 英语
