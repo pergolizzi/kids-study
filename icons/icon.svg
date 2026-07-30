@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFB6C1"/>
+      <stop offset="50%" stop-color="#FFC0CB"/>
+      <stop offset="100%" stop-color="#FFD1DC"/>
+    </linearGradient>
+    <linearGradient id="hood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF69B4"/>
+      <stop offset="100%" stop-color="#FF1493"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#FF69B4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- 背景圆角 -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  <rect x="12" y="12" width="488" height="488" rx="92" fill="none" stroke="white" stroke-width="6" stroke-opacity="0.6"/>
+
+  <!-- 装饰小爱心 -->
+  <text x="80" y="80" font-size="28" opacity="0.5">💕</text>
+  <text x="380" y="90" font-size="24" opacity="0.5">🌸</text>
+  <text x="60" y="420" font-size="22" opacity="0.5">⭐</text>
+  <text x="400" y="430" font-size="26" opacity="0.5">💖</text>
+
+  <!-- ====== 美乐蒂头部 ====== -->
+
+  <!-- 头巾/帽子（粉色兜帽） -->
+  <ellipse cx="256" cy="200" rx="140" ry="120" fill="url(#hood)" filter="url(#shadow)"/>
+
+  <!-- 头巾折痕 -->
+  <path d="M170 170 Q200 140 256 135 Q312 140 342 170" fill="none" stroke="#FF69B4" stroke-width="3" stroke-opacity="0.5"/>
+
+  <!-- 左耳 -->
+  <ellipse cx="170" cy="135" rx="50" ry="70" fill="#FF69B4" transform="rotate(-20 170 135)"/>
+  <ellipse cx="170" cy="140" rx="35" ry="55" fill="#FFB6C1" transform="rotate(-20 170 140)"/>
+  <!-- 右耳 -->
+  <ellipse cx="342" cy="135" rx="50" ry="70" fill="#FF69B4" transform="rotate(20 342 135)"/>
+  <ellipse cx="342" cy="140" rx="35" ry="55" fill="#FFB6C1" transform="rotate(20 342 140)"/>
+
+  <!-- 头巾上的蝴蝶结/花饰（美乐蒂标志性右边小花） -->
+  <g transform="translate(340, 175)">
+    <circle cx="0" cy="0" r="18" fill="#FFE4E1"/>
+    <circle cx="0" cy="0" r="14" fill="#FF69B4"/>
+    <circle cx="0" cy="0" r="8" fill="#FFE4E1"/>
+    <!-- 花瓣装饰 -->
+    <circle cx="0" cy="-16" r="7" fill="#FFB6C1"/>
+    <circle cx="0" cy="16" r="7" fill="#FFB6C1"/>
+    <circle cx="-16" cy="0" r="7" fill="#FFB6C1"/>
+    <circle cx="16" cy="0" r="7" fill="#FFB6C1"/>
+  </g>
+
+  <!-- 脸部 -->
+  <ellipse cx="256" cy="210" rx="95" ry="85" fill="white"/>
+
+  <!-- 眼睛 -->
+  <ellipse cx="225" cy="200" rx="12" ry="14" fill="#2C1810"/>
+  <ellipse cx="287" cy="200" rx="12" ry="14" fill="#2C1810"/>
+  <!-- 眼睛高光 -->
+  <ellipse cx="221" cy="194" rx="5" ry="5" fill="white"/>
+  <ellipse cx="283" cy="194" rx="5" ry="5" fill="white"/>
+
+  <!-- 鼻子（美乐蒂标志性黄色小圆鼻） -->
+  <ellipse cx="256" cy="225" rx="10" ry="8" fill="#FFD700"/>
+  <ellipse cx="254" cy="223" rx="4" ry="3" fill="#FFFACD"/>
+
+  <!-- 嘴巴 -->
+  <path d="M240 240 Q256 255 272 240" fill="none" stroke="#FFB6C1" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- 腮红 -->
+  <ellipse cx="195" cy="230" rx="18" ry="12" fill="#FFB6C1" opacity="0.5"/>
+  <ellipse cx="317" cy="230" rx="18" ry="12" fill="#FFB6C1" opacity="0.5"/>
+
+  <!-- ====== 下方文字 ====== -->
+  <text x="256" y="420" text-anchor="middle" font-size="42" font-weight="bold" fill="white" font-family="sans-serif" filter="url(#shadow)">幼小衔接</text>
+  <text x="256" y="465" text-anchor="middle" font-size="28" fill="white" fill-opacity="0.85" font-family="sans-serif">学习工作台</text>
+</svg>
