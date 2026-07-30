@@ -1350,6 +1350,184 @@ body {
 .music-option.correct { background: var(--green-light); border-color: var(--green); }
 .music-option.wrong { background: var(--coral-light); border-color: var(--coral); }
 
+/* ========== 弹琴 ========== */
+.piano-upload-area {
+  padding: 4px 0;
+}
+
+.piano-upload-hint {
+  border: 3px dashed var(--purple-light);
+  border-radius: var(--radius);
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  background: linear-gradient(135deg, #F8F0FF, #FFF0F6);
+}
+
+.piano-upload-hint:hover {
+  border-color: var(--purple);
+  background: linear-gradient(135deg, #F0E0FF, #FFE0F0);
+  transform: translateY(-2px);
+}
+
+.piano-upload-hint:active { transform: scale(0.97); }
+
+.piano-upload-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.piano-upload-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.piano-upload-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.piano-upload-progress {
+  padding: 16px 0;
+}
+
+.piano-progress-bar {
+  height: 8px;
+  background: var(--purple-light);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.piano-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.piano-progress-text {
+  font-size: 12px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.piano-checkin-btn {
+  padding: 14px 40px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(213, 184, 255, 0.5);
+  transition: all 0.2s;
+}
+
+.piano-checkin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(213, 184, 255, 0.6); }
+.piano-checkin-btn:active { transform: scale(0.95); }
+
+.piano-checkin-btn.done {
+  background: var(--green);
+  box-shadow: 0 4px 15px rgba(181, 232, 168, 0.5);
+  pointer-events: none;
+}
+
+.piano-checkin-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.piano-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+.piano-video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.piano-video-item {
+  background: linear-gradient(135deg, #FFF9F0, #FFF0F6);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid var(--pink-light);
+  transition: all 0.2s;
+}
+
+.piano-video-item:hover { border-color: var(--pink); }
+
+.piano-video-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.piano-video-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.piano-video-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.piano-video-play-btn,
+.piano-video-delete-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.piano-video-play-btn {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+.piano-video-play-btn:hover { background: var(--blue); color: white; }
+
+.piano-video-delete-btn {
+  background: var(--coral-light);
+  color: var(--coral);
+}
+
+.piano-video-delete-btn:hover { background: var(--coral); color: white; }
+
+.piano-video-player {
+  width: 100%;
+  max-height: 260px;
+  border-radius: 12px;
+  background: #000;
+}
+
+.piano-no-video {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
 /* ========== 通知 ========== */
 .toast {
   position: fixed;
@@ -1629,6 +1807,10 @@ body {
     <div class="nav-icon">🎵</div>
     <div class="nav-label">乐理</div>
   </div>
+  <div class="nav-item" data-page="piano">
+    <div class="nav-icon">🎹</div>
+    <div class="nav-label">弹琴</div>
+  </div>
   <div class="nav-item" data-page="reading">
     <div class="nav-icon">📚</div>
     <div class="nav-label">课外拓展</div>
@@ -1858,6 +2040,56 @@ body {
         音乐小知识
       </div>
       <div id="musicTip" style="font-size:14px; line-height:1.7; color:var(--text);"></div>
+    </div>
+  </div>
+
+  <!-- ===== 弹琴 ===== -->
+  <div class="page" id="page-piano">
+    <div class="page-header">
+      <div class="page-title">🎹 弹琴练习</div>
+      <div class="page-subtitle">上传弹琴视频 · 每日打卡</div>
+    </div>
+
+    <!-- 上传区域 -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon" style="background:var(--purple-light);">📤</div>
+        上传弹琴视频
+      </div>
+      <div class="piano-upload-area" id="pianoUploadArea">
+        <input type="file" id="pianoVideoInput" accept="video/*" capture="environment" style="display:none;" onchange="handlePianoVideoUpload(event)">
+        <div class="piano-upload-hint" onclick="document.getElementById('pianoVideoInput').click()">
+          <div class="piano-upload-icon">🎬</div>
+          <div class="piano-upload-text">点击选择视频文件</div>
+          <div class="piano-upload-sub">支持 MP4、MOV 等格式（建议小于 10MB）</div>
+        </div>
+        <div class="piano-upload-progress" id="pianoUploadProgress" style="display:none;">
+          <div class="piano-progress-bar">
+            <div class="piano-progress-fill" id="pianoProgressFill"></div>
+          </div>
+          <div class="piano-progress-text" id="pianoProgressText">正在处理视频...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 打卡按钮 -->
+    <div class="card" style="text-align:center;">
+      <button class="piano-checkin-btn" id="pianoCheckinBtn" onclick="checkinPiano()">
+        ✅ 弹琴打卡
+      </button>
+      <div class="piano-checkin-status" id="pianoCheckinStatus"></div>
+    </div>
+
+    <!-- 视频列表 -->
+    <div class="card">
+      <div class="card-title">
+        <div class="card-title-icon" style="background:var(--pink-light);">🎞️</div>
+        我的弹琴视频
+        <span class="piano-count" id="pianoVideoCount">0 个视频</span>
+      </div>
+      <div class="piano-video-list" id="pianoVideoList">
+        <div class="empty-state">还没有上传视频，点击上方上传吧~ 🎹</div>
+      </div>
     </div>
   </div>
 
@@ -2689,6 +2921,8 @@ let state = {
   musicDoneSet: [],
   mathDoneCount: 0,
   pinyinDoneSet: [],
+  pianoVideos: [],       // 弹琴视频列表 [{id, date, data(base64), name, size}]
+  pianoCheckedToday: false,
 };
 
 const COLOR_MAP = {
@@ -2727,7 +2961,14 @@ function getDailyIndex(total, offset = 0) {
 
 function saveState() {
   try {
-    localStorage.setItem('kidsStudyState', JSON.stringify(state));
+    // 主状态（不含视频大数据）
+    const stateToSave = { ...state };
+    delete stateToSave.pianoVideos;
+    localStorage.setItem('kidsStudyState', JSON.stringify(stateToSave));
+    // 视频单独存储
+    if (state.pianoVideos && state.pianoVideos.length > 0) {
+      localStorage.setItem('kidsStudyPianoVideos', JSON.stringify(state.pianoVideos));
+    }
   } catch(e) { console.warn('Save failed', e); }
 }
 
@@ -2740,6 +2981,15 @@ function loadState() {
     }
   } catch(e) { console.warn('Load failed', e); }
 
+  // 加载视频数据
+  try {
+    const savedVideos = localStorage.getItem('kidsStudyPianoVideos');
+    if (savedVideos) {
+      state.pianoVideos = JSON.parse(savedVideos);
+    }
+  } catch(e) { state.pianoVideos = []; }
+
+  if (!state.pianoVideos) state.pianoVideos = [];
   if (!state.tasks || state.tasks.length === 0) {
     state.tasks = JSON.parse(JSON.stringify(DEFAULT_TASKS));
   }
@@ -3546,6 +3796,221 @@ function nextLogic() {
   showNextLogic();
 }
 
+// ===== 弹琴 =====
+
+function renderPiano() {
+  // 检查今日是否已打卡
+  const today = getToday();
+  state.pianoCheckedToday = (state.checkins[today] && state.checkins[today].includes('piano'));
+
+  // 更新打卡按钮状态
+  const btn = document.getElementById('pianoCheckinBtn');
+  const status = document.getElementById('pianoCheckinStatus');
+  if (state.pianoCheckedToday) {
+    btn.textContent = '✅ 今日已打卡';
+    btn.classList.add('done');
+    status.textContent = '🎉 今天已经完成弹琴打卡啦！';
+  } else {
+    btn.textContent = '✅ 弹琴打卡';
+    btn.classList.remove('done');
+    status.textContent = state.pianoVideos.length > 0 ? '今天还没打卡，上传视频后来打卡吧~' : '还没有视频，先上传一段弹琴视频吧~';
+  }
+
+  renderPianoVideos();
+}
+
+function handlePianoVideoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // 检查文件类型
+  if (!file.type.startsWith('video/')) {
+    showToast('请选择视频文件~', 'error');
+    return;
+  }
+
+  // 检查文件大小（限制 15MB，base64 后约 20MB）
+  if (file.size > 15 * 1024 * 1024) {
+    showToast('视频太大啦，请选择小于 15MB 的视频~', 'error');
+    return;
+  }
+
+  // 显示进度
+  const progressArea = document.getElementById('pianoUploadProgress');
+  const progressFill = document.getElementById('pianoProgressFill');
+  const progressText = document.getElementById('pianoProgressText');
+  progressArea.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressText.textContent = '正在读取视频...';
+
+  const reader = new FileReader();
+
+  reader.onprogress = (e) => {
+    if (e.lengthComputable) {
+      const pct = Math.round((e.loaded / e.total) * 90);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = `正在读取视频... ${pct}%`;
+    }
+  };
+
+  reader.onload = (e) => {
+    progressFill.style.width = '95%';
+    progressText.textContent = '正在保存...';
+
+    const base64Data = e.target.result;
+
+    // 压缩：如果是大视频，限制分辨率（通过创建临时 video 元素无法在后台做，直接存）
+    const videoEntry = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      date: getToday(),
+      time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+      name: file.name,
+      size: file.size,
+      data: base64Data,
+    };
+
+    if (!state.pianoVideos) state.pianoVideos = [];
+    state.pianoVideos.unshift(videoEntry); // 最新在前
+
+    // 限制最多保存 10 个视频，防止 localStorage 溢出
+    if (state.pianoVideos.length > 10) {
+      state.pianoVideos = state.pianoVideos.slice(0, 10);
+    }
+
+    saveState();
+    renderPianoVideos();
+
+    progressFill.style.width = '100%';
+    progressText.textContent = '上传完成！🎉';
+
+    setTimeout(() => {
+      progressArea.style.display = 'none';
+    }, 1500);
+
+    showToast('视频上传成功！🎹', 'success');
+  };
+
+  reader.onerror = () => {
+    progressArea.style.display = 'none';
+    showToast('读取视频失败，请重试~', 'error');
+  };
+
+  reader.readAsDataURL(file);
+
+  // 重置 input 以便可以重复选择同一文件
+  event.target.value = '';
+}
+
+function renderPianoVideos() {
+  const list = document.getElementById('pianoVideoList');
+  const count = document.getElementById('pianoVideoCount');
+
+  if (!state.pianoVideos || state.pianoVideos.length === 0) {
+    list.innerHTML = '<div class="empty-state">还没有上传视频，点击上方上传吧~ 🎹</div>';
+    count.textContent = '0 个视频';
+    return;
+  }
+
+  count.textContent = state.pianoVideos.length + ' 个视频';
+
+  list.innerHTML = state.pianoVideos.map((v, i) => {
+    const sizeMB = (v.size / (1024 * 1024)).toFixed(1);
+    return `
+      <div class="piano-video-item">
+        <div class="piano-video-header">
+          <div class="piano-video-date">
+            📅 ${v.date} ${v.time || ''}
+            <span style="font-size:11px; color:var(--text-muted); margin-left:8px;">${v.name} (${sizeMB}MB)</span>
+          </div>
+          <div class="piano-video-actions">
+            <button class="piano-video-play-btn" onclick="playPianoVideo('${v.id}')" title="播放">▶️</button>
+            <button class="piano-video-delete-btn" onclick="deletePianoVideo('${v.id}')" title="删除">🗑️</button>
+          </div>
+        </div>
+        <div class="piano-video-player-wrapper" id="pianoPlayer-${v.id}" style="display:none;">
+          <video class="piano-video-player" id="pianoVideo-${v.id}" controls playsinline></video>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function playPianoVideo(videoId) {
+  const video = state.pianoVideos.find(v => v.id === videoId);
+  if (!video) return;
+
+  const wrapper = document.getElementById('pianoPlayer-' + videoId);
+  const videoEl = document.getElementById('pianoVideo-' + videoId);
+
+  if (wrapper.style.display === 'none') {
+    wrapper.style.display = 'block';
+    videoEl.src = video.data;
+    videoEl.play().catch(() => {});
+
+    // 暂停其他正在播放的视频
+    document.querySelectorAll('.piano-video-player').forEach(el => {
+      if (el.id !== 'pianoVideo-' + videoId) {
+        el.pause();
+        el.parentElement.style.display = 'none';
+      }
+    });
+  } else {
+    if (videoEl.paused) {
+      videoEl.play().catch(() => {});
+    } else {
+      videoEl.pause();
+      wrapper.style.display = 'none';
+    }
+  }
+}
+
+function deletePianoVideo(videoId) {
+  if (!confirm('确定要删除这个视频吗？')) return;
+
+  state.pianoVideos = state.pianoVideos.filter(v => v.id !== videoId);
+  saveState();
+  renderPianoVideos();
+
+  // 更新打卡按钮状态
+  const status = document.getElementById('pianoCheckinStatus');
+  if (state.pianoVideos.length === 0) {
+    status.textContent = '还没有视频，先上传一段弹琴视频吧~';
+  }
+
+  showToast('视频已删除', 'info');
+}
+
+function checkinPiano() {
+  const today = getToday();
+
+  if (state.pianoCheckedToday) {
+    showToast('今天已经打过卡啦~ 🎉', 'info');
+    return;
+  }
+
+  if (!state.pianoVideos || state.pianoVideos.length === 0) {
+    showToast('请先上传一段弹琴视频再打卡哦~', 'error');
+    return;
+  }
+
+  // 执行打卡
+  if (!state.checkins[today]) state.checkins[today] = [];
+  state.checkins[today].push('piano');
+  state.pet.coins += 1;
+  state.pet.happy = Math.min(100, state.pet.happy + 5);
+  state.pianoCheckedToday = true;
+
+  showToast('弹琴打卡成功！+1积分 🎹🎉', 'success');
+
+  // 更新 UI
+  const btn = document.getElementById('pianoCheckinBtn');
+  btn.textContent = '✅ 今日已打卡';
+  btn.classList.add('done');
+  document.getElementById('pianoCheckinStatus').textContent = '🎉 今天已经完成弹琴打卡啦！';
+
+  saveState();
+}
+
 // ===== 课外拓展阅读 =====
 let readingSpeechActive = false;
 let scienceSpeechActive = false;
@@ -3980,6 +4445,7 @@ function navigate(page) {
   if (page === 'pet') { renderPet(); renderInventory(); }
   if (page === 'shop') { renderShop(); }
   if (page === 'reading') { renderReading(); }
+  if (page === 'piano') { renderPiano(); }
 }
 
 // ==================== 通知 ====================
